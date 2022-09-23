@@ -23,10 +23,13 @@ export const createColor = async (req, res) => {
 }
 
 export const updateColor = async (req, res) => {
+  console.log('req.params.id',req.params.id)
   try {
     await Color.update(req.body, {
       where: {id: req.params.id}
     })
+    console.log('req.body', req.body)
+
     return res.status(201).json({message: "color is updated"})
   } catch (err) {
     console.log("err", err)
@@ -36,7 +39,7 @@ export const updateColor = async (req, res) => {
 export const deleteColor = async (req, res) => {
   try {
     let x = await Color.destroy({where: {id: req.params.id}})
-    return res.status(201).json({message: "color is deleted"})
+    return res.status(200).json({message: "color is deleted"})
   } catch (err) {
     console.log("error", err)
   }

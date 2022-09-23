@@ -15,6 +15,7 @@ const PORT = process.env.PORT || 3333;
 app.use(cookieParser())
 app.use(express.json())
 app.use(cors())
+
 app.use("/api/auth", authRouter)
 app.use("/api/product", productRouter)
 app.use("/api/color", colorRouter)

@@ -5,8 +5,8 @@ import {verifyToken} from "../verifyToken";
 const router = Router()
 
 router.post("/", verifyToken, createColor)
-router.put("/:id", verifyToken, updateColor)
+router.put("/:id", updateColor)
 router.delete("/:id", verifyToken, deleteColor)
-router.get("/:id", verifyToken, getColors)
+router.get("/", verifyToken, getColors)
 
 export default router;

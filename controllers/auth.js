@@ -58,12 +58,14 @@ export const login = async (req, res, next) => {
       const token = generateAccessToken(user.id, user.roles, {isAdmin: user.isAdmin},)
       const {password, isAdmin, ...otherDetails} = user._previousDataValues
 
+      console.log('token', token)
+
       res
         .cookie("access_token", token, {
           httpOnly: true,
         })
         .status(200)
-        .json({details: {...otherDetails}, isAdmin});
+        .json({details: {...otherDetails}, isAdmin, token});
     }
       // return next(createError(401, "Wrong password or username"));
 

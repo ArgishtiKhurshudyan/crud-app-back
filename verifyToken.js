@@ -26,7 +26,7 @@ export const verifyToken = async (req, res, next) => {
 
       const user = await User.findByPk(id)
 
-      if (!user  ) {
+      if (!user) {
         return res.status(401).json({message: "Not enough permission to perform the request!"})
       }else{
         req.user = user

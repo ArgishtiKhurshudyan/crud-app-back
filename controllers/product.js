@@ -45,10 +45,11 @@ export const createProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   try {
-    const {productId} = req.params;
+    // const {productId} = req.params;
     const product = await Product.findOne({
-      where: {id: productId, user_id: req.user.id}
+      where: {id: req.params.id}
     })
+
     if (!product) {
       return res.status(400).json({message: "product not found"})
     }

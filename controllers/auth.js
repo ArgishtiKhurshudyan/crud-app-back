@@ -17,7 +17,7 @@ export const register = async (req, res) => {
     const hash = bcrypt.hashSync(req.body.password, salt);
     let data = await User.findOne({where: {email: req.body.email}})
     if (data) {
-      res.status(200).json({message: "user is already created"});
+      res.status(401).json({message: "user is already created"});
     } else {
       let user = await User.create({
         ...req.body,
@@ -52,7 +52,6 @@ export const login = async (req, res, next) => {
     );
 
     if (!isPasswordCorrect) {
-      console.log('123132')
       return res.status(401).json({'message': "Wrong password or username"})
     } else {
       const token = generateAccessToken(user.id, user.roles, {isAdmin: user.isAdmin},)

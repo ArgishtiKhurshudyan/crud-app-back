@@ -33,8 +33,15 @@ export const createProduct = async (req, res) => {
     await productTobeAssignColors.addColors(colorIds, {through: 'ProductColors'})
     // await productTobeAssignColors.setProducts(req.body.colors, { through: 'ProductColors' } ) // many to many update
     // await productTobeAssignColors.removeProducts(req.body.colors, { through: 'ProductColors' } ) // many to many delete
+    const createdProd = await Product.findOne({
+      where: {id: product.id, user_id: req.user.id},
+      include: {
+        model: Color,
+        as: "colors"
+      }
+    });
 
-    return res.status(200).json({message: "product is created!", data: product})
+    return res.status(200).json({message: "product is created!", data: createdProd})
   } catch (err) {
     console.log("error", err)
     res.status(500).json({

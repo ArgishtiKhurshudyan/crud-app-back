@@ -7,7 +7,6 @@ export const createProduct = async (req, res) => {
     const product = await Product.create({
       ...req.body,
       user_id: req.user.id,
-
     });
 
     const colors = await Color.findAll({
@@ -136,6 +135,33 @@ export const getProducts = async (req, res) => {
     // })
 
     return res.status(200).json({products: product})
+  } catch (err) {
+    // console.log("error", err)
+    console.log('Catch for getProducts, error:', err.message)
+  }
+}
+export const findOne = async (req, res) => {
+  try {
+    const { id } = req.params
+    const product = await Product.findByPk(id,{
+      include: {
+        model: Color,
+        as: "colors",
+      },
+      where: {
+        user_id: req.user.id
+      },
+    });
+    if (!product) {
+      res.status(400).json({message: "Product is not found!"})
+    }
+    // const user = await User.findOne({
+    //   attributes: {
+    //     exclude: ["password"]
+    //   },
+    // })
+
+    return res.status(200).json({product})
   } catch (err) {
     // console.log("error", err)
     console.log('Catch for getProducts, error:', err.message)

@@ -6,7 +6,7 @@
   "scripts": {
     "seed": "npx sequelize-cli db:seed:all",
     "make-seed": "npx sequelize-cli seed:generate --name demo-color",
-    "make-model": "npx sequelize-cli model:generate --name ProductColor --attributes productColorId:integer",
+    "make-model": "npx sequelize-cli model:generate --name contactus --attributes id:integer",
     "migrate": "npx sequelize-cli db:migrate",
     "undo": "npx sequelize-cli db:migrate:undo",
     "watch": "nodemon -r esm index.js",
@@ -16,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "nodemailer": "^6.8.0",
     "nodemon": "^2.0.19",
     "sequelize-cli": "^6.4.1"
   },

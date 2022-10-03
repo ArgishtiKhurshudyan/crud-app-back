@@ -3,7 +3,6 @@ import {Op} from "sequelize";
 
 export const createProduct = async (req, res) => {
   try {
-    console.log('req.user.id',req.user.id)
     const product = await Product.create({
       ...req.body,
       user_id: req.user.id,
@@ -19,11 +18,10 @@ export const createProduct = async (req, res) => {
     })
 
     const colorIds = colors.map(i => i.id)
-
     const productTobeAssignColors = await Product.findOne({
-     where:{
-       id: product.id,
-     },
+      where: {
+        id: product.id,
+      },
       include: {
         model: Color,
         as: 'colors'
@@ -51,7 +49,6 @@ export const createProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   try {
-    // const {productId} = req.params;
     const product = await Product.findOne({
       where: {id: req.params.id}
     })
@@ -82,7 +79,9 @@ export const deleteProduct = async (req, res) => {
     await product.destroy(req.body)
     return res.status(200).json({message: "product is deleted!"})
   } catch (err) {
-    console.log("error", err)
+    res.status(500).json({
+      message: 'Something went wrong!'
+    })
   }
 }
 
@@ -109,7 +108,9 @@ export const getProduct = async (req, res) => {
 
     return res.status(200).json({products: product, users})
   } catch (err) {
-    console.log("error", err)
+    res.status(500).json({
+      message: 'Something went wrong!'
+    })
   }
 }
 
@@ -128,22 +129,18 @@ export const getProducts = async (req, res) => {
     if (!product) {
       res.status(400).json({message: "Product is not found!"})
     }
-    // const user = await User.findOne({
-    //   attributes: {
-    //     exclude: ["password"]
-    //   },
-    // })
-
     return res.status(200).json({products: product})
   } catch (err) {
-    // console.log("error", err)
-    console.log('Catch for getProducts, error:', err.message)
+    res.status(500).json({
+      message: 'Something went wrong!'
+    })
   }
 }
+
 export const findOne = async (req, res) => {
   try {
-    const { id } = req.params
-    const product = await Product.findByPk(id,{
+    const {id} = req.params
+    const product = await Product.findByPk(id, {
       include: {
         model: Color,
         as: "colors",
@@ -155,15 +152,10 @@ export const findOne = async (req, res) => {
     if (!product) {
       res.status(400).json({message: "Product is not found!"})
     }
-    // const user = await User.findOne({
-    //   attributes: {
-    //     exclude: ["password"]
-    //   },
-    // })
-
     return res.status(200).json({product})
   } catch (err) {
-    // console.log("error", err)
-    console.log('Catch for getProducts, error:', err.message)
+    res.status(500).json({
+      message: 'Something went wrong!'
+    })
   }
 }

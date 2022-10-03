@@ -1,6 +1,5 @@
-import {User, Product, Color} from "../models";
+import {User} from "../models";
 import bcrypt from "bcryptjs";
-import {createError} from "../utils/error";
 import jwt from "jsonwebtoken";
 
 const generateAccessToken = (id, roles) => {
@@ -36,13 +35,6 @@ export const login = async (req, res, next) => {
     const user = await User.findOne(
       {
         where: {email: req.body.email},
-        // include: {
-        //   model: Product,
-        //   include: {
-        //     model: Color,
-        //     as: 'products'
-        //   }
-        // }
       });
 
     if (!user) return res.status(401).json({message: "username not found"});
@@ -57,8 +49,6 @@ export const login = async (req, res, next) => {
       const token = generateAccessToken(user.id, user.roles, {isAdmin: user.isAdmin},)
       const {password, isAdmin, ...otherDetails} = user._previousDataValues
 
-      console.log('token', token)
-
       res
         .cookie("access_token", token, {
           httpOnly: true,
@@ -66,7 +56,6 @@ export const login = async (req, res, next) => {
         .status(200)
         .json({details: {...otherDetails}, isAdmin, token});
     }
-      // return next(createError(401, "Wrong password or username"));
 
   } catch (err) {
     return res.status(500).json(err)

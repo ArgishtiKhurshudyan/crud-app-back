@@ -1,4 +1,4 @@
-import {Color} from '../models'
+import {Color, Product} from '../models'
 
 export const createColor = async (req, res) => {
   try {
@@ -43,5 +43,24 @@ export const getColors = async (req, res) => {
     res.status(200).json({data: color})
   } catch (err) {
     throw err
+  }
+}
+
+export const findOneColor = async (req, res) => {
+  try {
+    const {id} = req.params
+    const color = await Color.findByPk(id, {
+      where: {
+        id: id
+      },
+    });
+    if (!color) {
+      res.status(400).json({message: "Product is not found!"})
+    }
+    return res.status(200).json({color})
+  } catch (err) {
+    res.status(500).json({
+      message: 'Something went wrong!'
+    })
   }
 }

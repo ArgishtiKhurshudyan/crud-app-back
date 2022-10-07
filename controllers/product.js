@@ -49,20 +49,30 @@ export const createProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   try {
-    if(req.body.colors){
-      for(const [key, value] of Object.entries(req.body.colors)){
-        await Color.update({
+
+    for (const [key, value] of Object.entries(req.body.colors || {})) {
+      await Color.update({
           colorName: value
         },
-          {
-            where: {
-              id: key
-            }
+        {
+          where: {
+            id: key
           }
-        )
-      }
+        }
+      )
     }
-    await Product.update(req.body, { where: {id: req.params.id} })
+    const colors = await Color.findAll({
+      where: {
+        id: {
+          [Op.in]: req.body.newColor,
+        }
+      },
+      attributes: ['id']
+    })
+
+    const colorsId = colors.map((i) => i.id)
+
+    await Product.update(req.body, {where: {id: req.params.id}})
     const product = await Product.findOne({
       where: {id: req.params.id},
       include: {
@@ -70,10 +80,22 @@ export const updateProduct = async (req, res) => {
         as: "colors",
       },
     })
+
+
+    await product.addColors(colorsId, {through: 'ProductColors'})
+
     if (!product) {
       return res.status(400).json({message: "product not found"})
     }
-    return res.status(200).json({message: "product is updated!", data: product })
+
+    const updatedProduct = await Product.findOne({
+      where: {id: req.params.id},
+      include: {
+        model: Color,
+        as: "colors",
+      },
+    })
+    return res.status(200).json({message: "product is updated!", data: updatedProduct})
   } catch (err) {
     console.log("error", err)
     res.status(500).json({

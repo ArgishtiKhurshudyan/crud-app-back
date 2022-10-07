@@ -30,8 +30,14 @@ export const updateColor = async (req, res) => {
 
 export const deleteColor = async (req, res) => {
   try {
-    await Color.destroy({where: {id: req.params.id}})
-    return res.status(200).json({message: "color is deleted"})
+    const {id} = req.params;
+    const deletedColor =  await Color.findOne({
+      where: {
+        id: id
+      },
+    });
+    await Color.destroy({where: {id: id}})
+    return res.status(200).json({message: "color is deleted", data:deletedColor})
   } catch (err) {
     throw err
   }
@@ -55,7 +61,7 @@ export const findOneColor = async (req, res) => {
       },
     });
     if (!color) {
-      res.status(400).json({message: "Product is not found!"})
+      res.status(400).json({message: "color is not found!"})
     }
     return res.status(200).json({color})
   } catch (err) {

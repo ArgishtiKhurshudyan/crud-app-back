@@ -183,9 +183,7 @@ export const findOne = async (req, res) => {
         model: Color,
         as: "colors",
       },
-      where: {
-        user_id: req.user.id
-      },
+
     });
     if (!product) {
       res.status(400).json({message: "Product is not found!"})

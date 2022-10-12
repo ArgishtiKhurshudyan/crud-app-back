@@ -1,8 +1,23 @@
 import {Product, User, Color} from '../models';
 import {Op} from "sequelize";
+import Joi from "joi";
+
+const productCreate = Joi.object({
+  productName: Joi.string().min(3).max(10).required().messages({
+    'string.min': 'product name length must be at least 3 characters long!',
+    'string.max': 'product name length must be less than or equal to 10 characters long!',
+  }),
+  colors: Joi.array().items(Joi.number()).required()
+})
 
 export const createProduct = async (req, res) => {
   try {
+    const {error} = await productCreate.validate(req.body)
+    if (error) {
+      return res.status(400).json({
+        message: error.details ? error.details[0].message : error.message
+      })
+    }
     const product = await Product.create({
       ...req.body,
       user_id: req.user.id,

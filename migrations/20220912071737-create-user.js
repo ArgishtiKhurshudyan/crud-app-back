@@ -26,6 +26,11 @@ module.exports = {
         required: true,
         select:false
       },
+      confirmPassword: {
+        type: Sequelize.STRING,
+        required: true,
+        select:false
+      },
       isAdmin: {
         type:Sequelize.BOOLEAN,
         default:false,

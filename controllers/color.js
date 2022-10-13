@@ -26,7 +26,7 @@ export const createColor = async (req, res) => {
     //   truncate: false
     // })
     // await colorToBeAssignProducts.addColors(req.body.products, {through: 'ProductColors'})
-    return res.status(200).json({message: "color!", data: color})
+    return res.status(200).json({message: "color created success!", data: color})
   } catch (err) {
     return res.status(500).json({message: 'Something went wrong!'})
   }
@@ -56,7 +56,7 @@ export const deleteColor = async (req, res) => {
       },
     });
     await Color.destroy({where: {id: id}})
-    return res.status(200).json({message: "color is deleted", data: deletedColor})
+    return res.status(200).json({response: "color is deleted"})
   } catch (err) {
     throw err
   }

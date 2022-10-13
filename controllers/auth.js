@@ -54,11 +54,11 @@ export const register = async (req, res) => {
       let user = await User.create({
         ...req.body,
         password: hash,
+        confirmPassword:hash
       });
       const {password, ...otherDetails} = user._previousDataValues
       res.status(200).json({details: {...otherDetails}})
     }
-
 
   } catch (err) {
     throw err
